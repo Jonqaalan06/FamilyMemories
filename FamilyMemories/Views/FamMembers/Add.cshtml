@@ -1,0 +1,46 @@
+﻿@model FamilyMemories.Models.AddFamilyMemberViewModel
+
+@{
+}
+
+<h1>Add Family Member</h1>
+<form method="post" action="Add" class="mt-5">
+  <div class="mb-3">
+    <label for="" class="form-label">First Name</label>
+    <input type="text" class="form-control" asp-for="FirstName">
+  </div>
+  <div class="mb-3">
+    <label for="" class="form-label">Middle Name</label>
+    <input type="text" class="form-control" asp-for="MiddleName">
+  </div>
+  <div class="mb-3">
+    <label for="" class="form-label">Last Name</label>
+    <input type="text" class="form-control" asp-for="LastName">
+  </div>
+  <div class="mb-3">
+    <label for="" class="form-label">SpouseId</label>
+    <input type="text" class="form-control" asp-for="SpouseId">
+  </div>
+  <div class="mb-3">
+    <label for="" class="form-label">FatherId</label>
+    <input type="text" class="form-control" asp-for="FatherId">
+  </div>
+  <div class="mb-3">
+    <label for="" class="form-label">MotherId</label>
+    <input type="text" class="form-control" asp-for="MotherId">
+  </div>
+  <div class="mb-3">
+    <label for="" class="form-label">SiblingIds (comma separated list)</label>
+    <input type="text" class="form-control" asp-for="SiblingIds">
+  </div>
+  <div class="mb-3">
+    <label for="" class="form-label">ChildrenIds (comma separated list)</label>
+    <input type="text" class="form-control" asp-for="ChildrenIds">
+  </div>
+
+ 
+  <button type="submit" class="btn btn-primary">Add</button>
+</form>
+
+
+

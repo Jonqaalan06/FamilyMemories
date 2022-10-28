@@ -1,0 +1,35 @@
+﻿@model FamilyMemories.Models.FamilyMemberRelationshipsViewModel
+@{
+}
+
+<div class="card mb-3" style="max-width: 540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img class="img-fluid rounded-start" alt="...">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">@Model.Self.FirstName @Model.Self.MiddleName @Model.Self.LastName</h5>
+        <p class="card-text">Spouse: <a href="@Model.Spouse.Id">@Model.Spouse.FirstName @Model.Spouse.LastName</a></p>
+        <p class="card-text">Father: <a href="@Model.Father.Id">@Model.Father.FirstName @Model.Father.LastName</a></p>
+        <p class="card-text">Mother: <a href="@Model.Mother.Id">@Model.Mother.FirstName @Model.Mother.LastName</a></p>
+        <p class="card-text">Siblings: 
+                    @foreach (var famMember in Model.Siblings)
+                    {
+                        <a href="@famMember.Id">@famMember.FirstName @famMember.LastName</a>
+                    }
+        </p>
+        <p class="card-text">Children: 
+                    @foreach (var famMember in Model.Children)
+                    {
+                        <a href="@famMember.Id">@famMember.FirstName @famMember.LastName</a>
+                    }
+        </p>
+        @*<p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>*@
+      </div>
+    </div>
+  </div>
+</div>
+<h6> <a href="/FamMemberViewImages/?FamMemberId=@Model.Self.Id">Pictures of @Model.Self.FirstName</a></h6>
+<h6>Documents from @Model.Self.FirstName</h6>
+

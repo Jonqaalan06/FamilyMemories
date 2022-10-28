@@ -1,0 +1,28 @@
+﻿@model List<FamilyMemories.Models.FamilyMember>
+
+@{
+}
+
+<h1>Family Members</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Update</th>
+            <th>Memories</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var famMember in Model)
+        {
+            <tr>
+                <td>@famMember.Id</td>
+                <td>@famMember.LastName, @famMember.FirstName @famMember.MiddleName</td>
+                <td><a href="FamMembers/View/@famMember.Id">Update</a></td>
+                <td><a href="FamMembers/Memories/@famMember.Id">@famMember.FirstName's Memories</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
