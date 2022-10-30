@@ -2,6 +2,7 @@
 using FamilyMemories.Models;
 using FamilyMemories.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace FamilyMemories.Controllers
@@ -19,26 +20,23 @@ namespace FamilyMemories.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var famMembers = await familyMembersDbContext.FamilyMembers.ToListAsync();
-            var famMemberImages = new FamilyMemberImageViewModel() { FamMembers = famMembers };
-            return View(famMemberImages);
+            List<SelectListItem> Options;
+            Options = familyMembersDbContext.FamilyMembers.Select(x => 
+            new SelectListItem
+            {
+                Value = x.Id.ToString(),
+                Text = x.FirstName + " " + x.LastName
+
+            }).ToList();
+            var viewModel = new FamilyMemberImageViewModel() { Options = Options };
+            return View(viewModel);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Upload(FamilyMemberImageViewModel viewModel)
-        {
-            var famMemberSelected = new FamilyMember()
-            {
-                foreach (var member in viewModel.FamMembers.Where(m => m.FirstName.selected));
-            }
-            var fmivm = new FamilyMemberImageViewModel()
-            {
-                Image = viewModel.Image,
-
-            };
-            await _uploadService.UploadImageAsync();
-            return RedirectToAction("Index");
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> Upload(FamilyMemberImageViewModel viewModel)
+        //{
+            
+        //}
 
 
         //[HttpPost]
