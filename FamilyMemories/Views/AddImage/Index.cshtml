@@ -1,33 +1,35 @@
 ﻿@model FamilyMemories.Models.FamilyMemberImageViewModel
 @{
 }
-
 <h1>Upload Image</h1>
 <hr/>
 <div class="row">
     <div class="col-mt-3">
-        <form asp-action="Post" enctype="multipart/form-data">
+        <form asp-action="Upload" enctype="multipart/form-data">
             <div class="form-group">
                 <label asp-for="Image.ShortDescription" class="control-label"></label>
                 <input asp-for="Image.ShortDescription" class="form-control" />
             </div>
             <br />
             <div class="form-group">
-                <label asp-for="Image.ImageFile" class="control-label"></label>
+                
                 <input asp-for="Image.ImageFile" accept="image/*" />
             </div>
             <br />
-            <label class="control-label">Select All People in the Picture</label>
-            <select 
-                class="form-select form-select-sm" 
-                multiple 
-                aria-label=".form-select-sm example" 
-                asp-for="Options" 
-                asp-items="@Model.Options">
-            </select>
-            <label>
+            
+            <div class="col-mt-3t">
+                
+                <select 
+                    class="js-multiple-select form-control" 
+                    multiple="multiple" 
+                    asp-for="Options" 
+                    asp-items="@Model.Options" 
+                    data-placeholder="Select All People in the Picture"></select>
+            </div>
+              
+            <label>Family member in the picture, but not in the list?
                 <a href="/FamMembers/Add">
-                    Family member in the picture, but not in the list? Add them please
+                     Add them please
                 </a>
             </label>
             <br  />
@@ -36,5 +38,3 @@
         </form>
     </div>
 </div>
-
-
