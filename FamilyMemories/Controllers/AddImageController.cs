@@ -20,23 +20,40 @@ namespace FamilyMemories.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            var options = BindToSelectList();
+            var viewModel = new FamilyMemberImageViewModel() { Options = options };
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Upload(FamilyMemberImageViewModel viewModel)
+        {
+            var options = BindToSelectList();
+            var selectedOptions = new List<SelectListItem>();
+            foreach (var selectedPerson in options)
+            {
+                if (selectedPerson.Selected)
+                {
+                    selectedOptions.Add(selectedPerson);
+                }
+            }
+            List<FamilyMember> peopleInPic;
+            return View(viewModel);
+
+        }
+
+        private List<SelectListItem> BindToSelectList()
+        {
             List<SelectListItem> Options;
-            Options = familyMembersDbContext.FamilyMembers.Select(x => 
+            Options = familyMembersDbContext.FamilyMembers.Select(x =>
             new SelectListItem
             {
                 Value = x.Id.ToString(),
                 Text = x.FirstName + " " + x.LastName
 
             }).ToList();
-            var viewModel = new FamilyMemberImageViewModel() { Options = Options };
-            return View(viewModel);
+            return Options;
         }
-
-        //[HttpPost]
-        //public async Task<IActionResult> Upload(FamilyMemberImageViewModel viewModel)
-        //{
-            
-        //}
 
 
         //[HttpPost]
