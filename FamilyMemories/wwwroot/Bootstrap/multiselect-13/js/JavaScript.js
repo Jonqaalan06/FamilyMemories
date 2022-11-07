@@ -1,1 +1,0 @@
-﻿console.log("Type a string in here")

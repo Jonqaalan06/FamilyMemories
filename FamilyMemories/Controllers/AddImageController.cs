@@ -26,20 +26,13 @@ namespace FamilyMemories.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Upload(FamilyMemberImageViewModel viewModel)
+        public async Task<IActionResult> Upload(List<int> selectedFamilyMemberIds)
         {
-            var options = BindToSelectList();
-            var selectedOptions = new List<SelectListItem>();
-            foreach (var selectedPerson in options)
-            {
-                if (selectedPerson.Selected)
-                {
-                    selectedOptions.Add(selectedPerson);
-                }
-            }
             List<FamilyMember> peopleInPic;
-            return View(viewModel);
+            //TODO: query for family members in database with selected ids
 
+
+            return new EmptyResult();
         }
 
         private List<SelectListItem> BindToSelectList()

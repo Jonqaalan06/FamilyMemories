@@ -1,6 +1,11 @@
 ﻿@model FamilyMemories.Models.FamilyMemberImageViewModel
 @{
 }
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
 <h1>Upload Image</h1>
 <hr/>
 <div class="row">
@@ -18,15 +23,15 @@
             <br />
             
             <div class="col-mt-3t">
-                
-                <select 
-                    class="js-multiple-select form-control" 
-                    multiple="multiple" 
-                    asp-for="Options" 
-                    asp-items="@Model.Options" 
-                    data-placeholder="Select All People in the Picture"></select>
+                <select class="selectpicker" multiple data-live-search="true"
+                        class="js-multiple-select form-control"
+                        multiple="multiple"
+                        asp-for="Options"
+                        asp-items="@Model.Options"
+                        data-placeholder="Select All People in the Picture">
+                </select>
             </div>
-              
+
             <label>Family member in the picture, but not in the list?
                 <a href="/FamMembers/Add">
                      Add them please
@@ -34,7 +39,9 @@
             </label>
             <br  />
             <br />
-            <button type="submit" class="btn btn-primary">Upload Image</button>
+            <button type="submit" class="btn btn-primary" id="upload-btn">Upload Image</button>
         </form>
     </div>
 </div>
+
+<script src="~/js/site.js"></script>
