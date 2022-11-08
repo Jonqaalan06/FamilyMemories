@@ -3,7 +3,6 @@ using FamilyMemories.Models;
 using FamilyMemories.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 
 namespace FamilyMemories.Controllers
 {
@@ -26,13 +25,12 @@ namespace FamilyMemories.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Upload(List<int> selectedFamilyMemberIds)
+        public async Task Upload(List<int> selectedFamilyMemberIds)
         {
             List<FamilyMember> peopleInPic;
             //TODO: query for family members in database with selected ids
 
 
-            return new EmptyResult();
         }
 
         private List<SelectListItem> BindToSelectList()
