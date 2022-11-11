@@ -25,7 +25,7 @@ namespace FamilyMemories.Controllers
         }
 
         [HttpPost]
-        public async Task Upload(List<int> selectedFamilyMemberIds)
+        public async Task Upload(FamilyMemberImageViewModel familyImage)
         {
             List<FamilyMember> peopleInPic;
             //TODO: query for family members in database with selected ids

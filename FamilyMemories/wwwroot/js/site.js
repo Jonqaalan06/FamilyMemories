@@ -1,10 +1,5 @@
-﻿$('#upload-btn').click((event) => {
-    event.preventDefault();
-
-    $.post('addImage/upload',
-        {
-            selectedFamilyMemberIds: $('.bootstrap-select').find('select').val()
-        },
-        () => location.reload(true)
-    );
+﻿$('html').click((event) => {
+    let selectedFamilyMemberIds = JSON.stringify($('.bootstrap-select').find('select').val());
+    $('#FamMemberIds').val(selectedFamilyMemberIds)
 });
+

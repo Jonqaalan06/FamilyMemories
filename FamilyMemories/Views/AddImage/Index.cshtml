@@ -12,13 +12,13 @@
     <div class="col-mt-3">
         <form asp-action="Upload" enctype="multipart/form-data">
             <div class="form-group">
-                <label asp-for="Image.ShortDescription" class="control-label"></label>
-                <input asp-for="Image.ShortDescription" class="form-control" />
+                <label asp-for="ImageDescription" class="control-label"></label>
+                <input asp-for="ImageDescription" class="form-control" />
             </div>
             <br />
             <div class="form-group">
                 
-                <input asp-for="Image.ImageFile" accept="image/*" />
+                <input asp-for="Image" accept="image/*" />
             </div>
             <br />
             
@@ -40,6 +40,7 @@
             <br />
             <br />
             <button type="submit" class="btn btn-primary" id="upload-btn">Upload Image</button>
+            <input asp-for="FamMemberIds" type="hidden" />
         </form>
     </div>
 </div>
