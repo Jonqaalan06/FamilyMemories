@@ -8,16 +8,24 @@ namespace FamilyMemories.Controllers
 {
     public class AddImageController : Controller
     {
-        private readonly FamilyMembersDbContext familyMembersDbContext;
+        private readonly FamilyMembersDbContext _familyMembersDbContext;
         private readonly IUploadService _uploadService;
         public AddImageController(FamilyMembersDbContext familyMembersDbContext, IUploadService uploadService)
         {
-            this.familyMembersDbContext = familyMembersDbContext;
+            _familyMembersDbContext = familyMembersDbContext;
             _uploadService = uploadService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
+        {
+            var options = BindToSelectList();
+            var viewModel = new FamilyMemberImageViewModel() { Options = options };
+            return View(viewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index(int famMemberId)
         {
             var options = BindToSelectList();
             var viewModel = new FamilyMemberImageViewModel() { Options = options };
@@ -36,7 +44,7 @@ namespace FamilyMemories.Controllers
         private List<SelectListItem> BindToSelectList()
         {
             List<SelectListItem> Options;
-            Options = familyMembersDbContext.FamilyMembers.Select(x =>
+            Options = _familyMembersDbContext.FamilyMembers.Select(x =>
             new SelectListItem
             {
                 Value = x.Id.ToString(),

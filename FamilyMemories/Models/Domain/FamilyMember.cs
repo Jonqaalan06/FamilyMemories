@@ -13,6 +13,7 @@ namespace FamilyMemories.Models
         public string? SiblingIds { get; set; }
         public string? ChildrenIds { get; set; }
         public List<FamilyMember_Image> FamilyMember_Images { get; set; }
+        public List<FamilyMember_Document> FamilyMember_Documents { get; set; }
 
     }
 }
