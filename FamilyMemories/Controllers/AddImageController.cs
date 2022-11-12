@@ -1,8 +1,12 @@
 ﻿using FamilyMemories.Data;
 using FamilyMemories.Models;
+using FamilyMemories.Models.Domain;
 using FamilyMemories.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Net;
+using System.Text.RegularExpressions;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace FamilyMemories.Controllers
 {
@@ -10,10 +14,12 @@ namespace FamilyMemories.Controllers
     {
         private readonly FamilyMembersDbContext _familyMembersDbContext;
         private readonly IUploadService _uploadService;
-        public AddImageController(FamilyMembersDbContext familyMembersDbContext, IUploadService uploadService)
+        private readonly IHostingEnvironment _environment;
+        public AddImageController(FamilyMembersDbContext familyMembersDbContext, IUploadService uploadService, IHostingEnvironment environment)
         {
             _familyMembersDbContext = familyMembersDbContext;
             _uploadService = uploadService;
+            _environment = environment;
         }
 
         [HttpGet]
@@ -33,12 +39,145 @@ namespace FamilyMemories.Controllers
         //}
 
         [HttpPost]
-        public async Task Upload(FamilyMemberImageViewModel familyImage)
+        public async Task<IActionResult> Upload(FamilyMemberImageViewModel familyImage)
         {
-            List<FamilyMember> peopleInPic;
-            //TODO: query for family members in database with selected ids
+            //Collect data from view
+            FamilyMemberImageViewModel fmivm = new FamilyMemberImageViewModel()
+            {
+                Options = familyImage.Options,
+                ImageDescription = familyImage.ImageDescription,
+                FamMemberIds = familyImage.FamMemberIds,
+                Image = familyImage.Image
+            };
+            //convert raw SelectedFamilyId string to a list of Family Members
+            List<FamilyMember> peopleInPic = await GetFamilyMembersAsync(fmivm.FamMemberIds);
 
+            //Upload the Picture to the FTP site
+            var imageLocation = UploadToFtpSite(fmivm.Image, peopleInPic.First());
 
+            //Update Image Table
+            var storedImage = new Image()
+            {
+                ImageLocation = imageLocation,
+                ShortDescription = fmivm.ImageDescription
+
+            };
+            int imageId = 0;
+            
+            await _familyMembersDbContext.Images.AddAsync(storedImage);
+            await _familyMembersDbContext.SaveChangesAsync();
+            imageId = storedImage.Id;
+            
+
+            //Update FamilyMember_Image table
+            foreach (var person in peopleInPic)
+            {
+                var fmImage = new FamilyMember_Image()
+                {
+                    FamilyMemberId = person.Id,
+                    FamilyMember = person,
+                    ImageId = imageId,
+                    Image = storedImage
+                };
+                
+                _familyMembersDbContext.FamilyMembers_Images.Add(fmImage);
+                _familyMembersDbContext.SaveChanges();
+                
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        private string UploadToFtpSite(IFormFile image, FamilyMember familyMember)
+        {
+            // FTP Server URL
+            string ftp = "ftp://192.168.86.240/";
+
+            // FTP Folder name. Leave blank if you want to upload to root folder
+            // (really blank, not "/" !)
+            string ftpFolder = @$"Pictures/";
+            byte[] fileBytes = null;
+            string ftpUserName = "FileUploadAdmin";
+            string ftpPassword = "TheSchowFamilyHasCrazyC00lPeople";
+
+            // read the File and convert it to Byte array.
+            string fileName = Path.GetFileName(image.FileName);
+            using (BinaryReader br = new BinaryReader(image.OpenReadStream()))
+            {
+                fileBytes = br.ReadBytes((int)image.Length);
+            }
+
+            try
+            {
+                // create FTP Request
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftp + ftpFolder + fileName);
+                request.Method = WebRequestMethods.Ftp.UploadFile;
+
+                // enter FTP Server credentials
+                request.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
+                request.ContentLength = fileBytes.Length;
+                request.UsePassive = true;
+                request.UseBinary = true;   // or FALSE for ASCII files
+                request.ServicePoint.ConnectionLimit = fileBytes.Length;
+                request.EnableSsl = false;
+
+                using (Stream requestStream = request.GetRequestStream())
+                {
+                    requestStream.Write(fileBytes, 0, fileBytes.Length);
+                    requestStream.Close();
+                }
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                response.Close();
+            }
+            catch (WebException ex)
+            {
+                throw new Exception((ex.Response as FtpWebResponse).StatusDescription);
+            }
+            return ftp + ftpFolder + fileName;
+        }
+
+        private static FtpWebRequest WriteFileToFtp(string ftp, string uniqueFileName, string ftpFolder, byte[] fileBytes, string ftpUserName, string ftpPassword)
+        {
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftp + ftpFolder + uniqueFileName);
+            request.Method = WebRequestMethods.Ftp.MakeDirectory;
+
+            // enter FTP Server credentials
+            request.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
+            request.ContentLength = fileBytes.Length;
+            request.UsePassive = true;
+            request.UseBinary = true;   // or FALSE for ASCII files
+            request.ServicePoint.ConnectionLimit = fileBytes.Length;
+            request.EnableSsl = false;
+
+            using (Stream requestStream = request.GetRequestStream())
+            {
+                requestStream.Write(fileBytes, 0, fileBytes.Length);
+                requestStream.Close();
+            }
+
+            return request;
+        }
+
+        private async Task<List<FamilyMember>> GetFamilyMembersAsync(string stringWithIds)
+        {
+            List<int> ids = ParseStringReturningIntegers(stringWithIds);
+            var result = new List<FamilyMember>();
+            foreach (var id in ids)
+            {
+                result.Add(await _familyMembersDbContext.FamilyMembers.FindAsync(id));
+            }
+            return result;
+        }
+
+        private static List<int> ParseStringReturningIntegers(string stringWithIds)
+        {
+            List<int> ids = new List<int>();
+            var messyIds = stringWithIds.Split(',').ToList();
+            foreach (var messyId in messyIds)
+            {
+                ids.Add(int.Parse(Regex.Replace(messyId, "[^.0-9]", "")));
+            }
+            return ids;
         }
 
         private List<SelectListItem> BindToSelectList()
@@ -53,27 +192,5 @@ namespace FamilyMemories.Controllers
             }).ToList();
             return Options;
         }
-
-
-        //[HttpPost]
-        //public async Task<IActionResult> Add(AddFamilyMemberViewModel addFamMemRequst)
-        //{
-        //    var famMember = new FamilyMember()
-        //    {
-        //        FirstName = addFamMemRequst.FirstName,
-        //        MiddleName = addFamMemRequst.MiddleName,
-        //        LastName = addFamMemRequst.LastName,
-        //        SpouseId = addFamMemRequst.SpouseId,
-        //        FatherId = addFamMemRequst.FatherId,
-        //        MotherId = addFamMemRequst.MotherId,
-        //        SiblingIds = addFamMemRequst.SiblingIds,
-        //        ChildrenIds = addFamMemRequst.ChildrenIds
-        //    };
-
-        //    await familyMembersDbContext.FamilyMembers.AddAsync(famMember);
-        //    await familyMembersDbContext.SaveChangesAsync();
-        //    return RedirectToAction("Index");
-
-        //}
     }
 }

@@ -35,6 +35,7 @@
   <ItemGroup>
     <Folder Include="Images\MemoryPictures\" />
     <Folder Include="Images\Profile Pictures\" />
+    <Folder Include="wwwroot\TestImages\" />
   </ItemGroup>
 
   <ItemGroup>
