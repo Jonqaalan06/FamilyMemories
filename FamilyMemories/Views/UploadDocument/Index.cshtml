@@ -12,13 +12,13 @@
     <div class="col-mt-3">
         <form asp-action="Upload" enctype="multipart/form-data">
             <div class="form-group">
-                <label asp-for="DocumentDescription" class="control-label"></label>
+                <label asp-for="DocumentDescription" class="control-label">Document Description</label>
                 <input asp-for="DocumentDescription" class="form-control" />
             </div>
             <br />
             <div class="form-group">
                 
-                <input asp-for="Document" accept="*" />
+                <input asp-for="Document" accept="*" class="form-control" />
             </div>
             <br />
             
