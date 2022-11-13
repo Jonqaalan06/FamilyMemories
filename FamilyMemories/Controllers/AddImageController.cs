@@ -14,12 +14,11 @@ namespace FamilyMemories.Controllers
     {
         private readonly FamilyMembersDbContext _familyMembersDbContext;
         private readonly IUploadService _uploadService;
-        private readonly IHostingEnvironment _environment;
+        
         public AddImageController(FamilyMembersDbContext familyMembersDbContext, IUploadService uploadService, IHostingEnvironment environment)
         {
             _familyMembersDbContext = familyMembersDbContext;
             _uploadService = uploadService;
-            _environment = environment;
         }
 
         [HttpGet]
@@ -62,12 +61,10 @@ namespace FamilyMemories.Controllers
                 ShortDescription = fmivm.ImageDescription
 
             };
-            int imageId = 0;
-            
             await _familyMembersDbContext.Images.AddAsync(storedImage);
             await _familyMembersDbContext.SaveChangesAsync();
-            imageId = storedImage.Id;
-            
+            int imageId = storedImage.Id;
+
 
             //Update FamilyMember_Image table
             foreach (var person in peopleInPic)
@@ -88,21 +85,21 @@ namespace FamilyMemories.Controllers
             return RedirectToAction("Index");
         }
 
-        private string UploadToFtpSite(IFormFile image, FamilyMember familyMember)
+        private static string UploadToFtpSite(IFormFile image, FamilyMember familyMember)
         {
             // FTP Server URL
             string ftp = "ftp://192.168.86.240/";
 
             // FTP Folder name. Leave blank if you want to upload to root folder
             // (really blank, not "/" !)
-            string ftpFolder = @$"Pictures/";
+            string ftpFolder = @$"Pictures/{familyMember.DirectoryName}";
             byte[] fileBytes = null;
             string ftpUserName = "FileUploadAdmin";
             string ftpPassword = "TheSchowFamilyHasCrazyC00lPeople";
 
             // read the File and convert it to Byte array.
             string fileName = Path.GetFileName(image.FileName);
-            using (BinaryReader br = new BinaryReader(image.OpenReadStream()))
+            using (BinaryReader br = new(image.OpenReadStream()))
             {
                 fileBytes = br.ReadBytes((int)image.Length);
             }
@@ -134,28 +131,6 @@ namespace FamilyMemories.Controllers
                 throw new Exception((ex.Response as FtpWebResponse).StatusDescription);
             }
             return ftp + ftpFolder + fileName;
-        }
-
-        private static FtpWebRequest WriteFileToFtp(string ftp, string uniqueFileName, string ftpFolder, byte[] fileBytes, string ftpUserName, string ftpPassword)
-        {
-            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftp + ftpFolder + uniqueFileName);
-            request.Method = WebRequestMethods.Ftp.MakeDirectory;
-
-            // enter FTP Server credentials
-            request.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
-            request.ContentLength = fileBytes.Length;
-            request.UsePassive = true;
-            request.UseBinary = true;   // or FALSE for ASCII files
-            request.ServicePoint.ConnectionLimit = fileBytes.Length;
-            request.EnableSsl = false;
-
-            using (Stream requestStream = request.GetRequestStream())
-            {
-                requestStream.Write(fileBytes, 0, fileBytes.Length);
-                requestStream.Close();
-            }
-
-            return request;
         }
 
         private async Task<List<FamilyMember>> GetFamilyMembersAsync(string stringWithIds)

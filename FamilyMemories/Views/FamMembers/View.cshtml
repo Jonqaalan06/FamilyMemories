@@ -5,8 +5,8 @@
 <h1>Update Family Member</h1>
 <form method="post" action="View" class="mt-5">
     <div class="mb-3">
-        <label for="" class="form-label">Id</label>
-        <input type="text" class="form-control" asp-for="Id" readonly>
+        <label for="" class="form-label">Directory</label>
+        <input type="text" class="form-control" asp-for="Directory" readonly>
     </div>
     <div class="mb-3">
         <label for="" class="form-label">First Name</label>
@@ -20,7 +20,7 @@
         <label for="" class="form-label">Last Name</label>
         <input type="text" class="form-control" asp-for="LastName">
     </div>
-    <div class="mb-3">
+    @*<div class="mb-3">
         <label for="" class="form-label">SpouseId</label>
         <input type="text" class="form-control" asp-for="SpouseId">
     </div>
@@ -39,9 +39,11 @@
     <div class="mb-3">
         <label for="" class="form-label">ChildrenIds (comma separated list)</label>
         <input type="text" class="form-control" asp-for="ChildrenIds">
-    </div>
+    </div>*@
 
-    <button type="submit" class="btn btn-primary">Update</button>
+    <button type="submit" class="btn btn-primary"
+        asp-action="View"
+        asp-controller="FamMembers">Update</button>
 
     <button type="submit" class="btn btn-danger" 
         asp-action="Delete"

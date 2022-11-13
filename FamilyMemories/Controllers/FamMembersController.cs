@@ -3,6 +3,7 @@ using FamilyMemories.Models.Domain;
 using FamilyMemories.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace FamilyMemories.Controllers
 {
@@ -42,11 +43,23 @@ namespace FamilyMemories.Controllers
                 ChildrenIds = addFamMemRequst.ChildrenIds
             };
 
+            try
+            {
+                famMember.DirectoryName = await CreateFtpFolderAsync(famMember);
+            }
+            catch (Exception)
+            {
+
+            }
+            
             await familyMembersDbContext.FamilyMembers.AddAsync(famMember);
             await familyMembersDbContext.SaveChangesAsync();
+
             return RedirectToAction("Index");
 
         }
+
+        
 
         [HttpGet]
         public async Task<IActionResult> View(int id)
@@ -62,10 +75,11 @@ namespace FamilyMemories.Controllers
                     LastName = famMember.LastName,
                     MiddleName = famMember.MiddleName,
                     SpouseId = famMember.SpouseId,
-                    FatherId= famMember.FatherId,
-                    MotherId= famMember.MotherId,
-                    SiblingIds= famMember.SiblingIds,
-                    ChildrenIds= famMember.ChildrenIds
+                    FatherId = famMember.FatherId,
+                    MotherId = famMember.MotherId,
+                    SiblingIds = famMember.SiblingIds,
+                    ChildrenIds = famMember.ChildrenIds,
+                    Directory = famMember.DirectoryName
                 };
                 return await Task.Run(() => View("View", viewModel));
             }
@@ -76,6 +90,17 @@ namespace FamilyMemories.Controllers
         public async Task<IActionResult> View(UpdateFamilyMemberViewModel updateFamMemRequst)
         {
             var famMember = await familyMembersDbContext.FamilyMembers.FindAsync(updateFamMemRequst.Id);
+
+            if (famMember.DirectoryName is null || famMember.DirectoryName == string.Empty)
+            {
+                try
+                {
+                    famMember.DirectoryName = await CreateFtpFolderAsync(famMember);
+                }
+                catch (Exception)
+                {
+                }
+            }
 
             if (famMember != null)
             {
@@ -116,6 +141,22 @@ namespace FamilyMemories.Controllers
             var famMember = await familyMembersDbContext.FamilyMembers.FindAsync(id);
             var relationships = GetKnownRelationships(famMember);
             return View(relationships);
+        }
+
+        private Task<string> CreateFtpFolderAsync(FamilyMember famMember)
+        {
+            string[] rootAddressses = new string[] { "ftp://192.168.86.240/Pictures/", "ftp://192.168.86.240/Documents/", "ftp://192.168.86.240/ProfilePicture/" };
+            string newAddresses = (famMember.FirstName + famMember.MiddleName + famMember.LastName);
+
+            foreach (var root in rootAddressses)
+            {
+                WebRequest request = WebRequest.Create(root + famMember.FirstName + famMember.MiddleName + famMember.LastName);
+                request.Method = WebRequestMethods.Ftp.MakeDirectory;
+                request.Credentials = new NetworkCredential("FileUploadAdmin", "TheSchowFamilyHasCrazyC00lPeople");
+
+                using var response = (FtpWebResponse)request.GetResponse();
+            }
+            return Task.FromResult(newAddresses);
         }
 
         private FamilyMemberRelationshipsViewModel GetKnownRelationships(FamilyMember? famMember)
