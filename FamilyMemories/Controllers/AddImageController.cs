@@ -92,7 +92,7 @@ namespace FamilyMemories.Controllers
 
             // FTP Folder name. Leave blank if you want to upload to root folder
             // (really blank, not "/" !)
-            string ftpFolder = @$"Pictures/{familyMember.DirectoryName}";
+            string ftpFolder = @$"Pictures\{familyMember.DirectoryName}\";
             byte[] fileBytes = null;
             string ftpUserName = "FileUploadAdmin";
             string ftpPassword = "TheSchowFamilyHasCrazyC00lPeople";
