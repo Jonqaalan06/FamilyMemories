@@ -29,14 +29,6 @@ namespace FamilyMemories.Controllers
             return View(viewModel);
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> Index(int famMemberId)
-        //{
-        //    var options = BindToSelectList();
-        //    var viewModel = new FamilyMemberImageViewModel() { Options = options };
-        //    return View(viewModel);
-        //}
-
         [HttpPost]
         public async Task<IActionResult> Upload(FamilyMemberImageViewModel familyImage)
         {
