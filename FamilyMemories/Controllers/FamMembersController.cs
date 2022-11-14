@@ -107,11 +107,6 @@ namespace FamilyMemories.Controllers
                 famMember.FirstName = updateFamMemRequst.FirstName;
                 famMember.LastName = updateFamMemRequst.LastName;
                 famMember.MiddleName = updateFamMemRequst.MiddleName;
-                famMember.SpouseId = updateFamMemRequst.SpouseId;
-                famMember.FatherId = updateFamMemRequst.FatherId;
-                famMember.MotherId = updateFamMemRequst.MotherId;
-                famMember.SiblingIds = updateFamMemRequst.SiblingIds;
-                famMember.ChildrenIds = updateFamMemRequst.ChildrenIds;
 
                 await familyMembersDbContext.SaveChangesAsync();
 

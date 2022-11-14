@@ -10,60 +10,60 @@
 <hr/>
 <div class="row">
     <div class="col-mt-3">
-        <form asp-action="Build" enctype="multipart/form-data">
+        <form asp-action="Update" enctype="multipart/form-data">
             
             <br />
             
             <div class="col-mt-3t">
-                <label asp-for="Spouse">Select @Model.Self.FirstName's Spouse</label>
+                <label asp-for="SpouseId">Select @Model.Self.FirstName's Spouse</label>
                 <select class="selectpicker" multiple data-live-search="true"
                         class="js-multiple-select form-control"
                         multiple="multiple"
-                        asp-for="Spouse"
+                        asp-for="SpouseId"
                         asp-items="@Model.Options"
                         data-placeholder="Select All People in the Picture">
                 </select>
             </div>
             <br />
             <div class="col-mt-3t">
-                <label asp-for="Father">Select @Model.Self.FirstName's Father</label>
+                <label asp-for="FatherId">Select @Model.Self.FirstName's Father</label>
                 <select class="selectpicker" multiple data-live-search="true"
                         class="js-multiple-select form-control"
                         multiple="multiple"
-                        asp-for="Father"
+                        asp-for="FatherId"
                         asp-items="@Model.Options"
                         data-placeholder="Select All People in the Picture">
                 </select>
             </div>
             <br />
             <div class="col-mt-3t">
-                <label asp-for="Mother">Select @Model.Self.FirstName's Mother</label>
+                <label asp-for="MotherId">Select @Model.Self.FirstName's Mother</label>
                 <select class="selectpicker" multiple data-live-search="true"
                         class="js-multiple-select form-control"
                         multiple="multiple"
-                        asp-for="Mother"
+                        asp-for="MotherId"
                         asp-items="@Model.Options"
                         data-placeholder="Select All People in the Picture">
                 </select>
             </div>
             <br />
             <div class="col-mt-3t">
-                <label asp-for="Siblings">Select @Model.Self.FirstName's Siblings</label>
+                <label asp-for="SiblingIds">Select @Model.Self.FirstName's Siblings</label>
                 <select class="selectpicker" multiple data-live-search="true"
                         class="js-multiple-select form-control"
                         multiple="multiple"
-                        asp-for="Siblings"
+                        asp-for="SiblingIds"
                         asp-items="@Model.Options"
                         data-placeholder="Select All People in the Picture">
                 </select>
             </div>
             <br />
             <div class="col-mt-3t">
-                <label asp-for="Children">Select @Model.Self.FirstName's Children</label>
+                <label asp-for="ChildrenIds">Select @Model.Self.FirstName's Children</label>
                 <select class="selectpicker" multiple data-live-search="true"
                         class="js-multiple-select form-control"
                         multiple="multiple"
-                        asp-for="Children"
+                        asp-for="ChildrenIds"
                         asp-items="@Model.Options"
                         data-placeholder="Select All People in the Picture">
                 </select>
@@ -78,6 +78,7 @@
             <input asp-for="MotherId" type="hidden" />
             <input asp-for="SiblingIds" type="hidden" />
             <input asp-for="ChildrenIds" type="hidden" />
+            <input asp-for="Self.Id" value="@Model.Self.Id type="hidden" />
 
         </form>
     </div>
