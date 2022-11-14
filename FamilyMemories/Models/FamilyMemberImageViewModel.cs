@@ -8,6 +8,7 @@ namespace FamilyMemories.Models
     {
         
         public List<SelectListItem>? Options { get; set; }
+        public FamilyMember? SelectedFamMember { get; set; }
 
         // TODO: look at implementing validation on these fields.
         [Required]

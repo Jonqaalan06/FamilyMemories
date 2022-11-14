@@ -22,10 +22,19 @@ namespace FamilyMemories.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
+            FamilyMember familyMember = null;
+            if (id is not null)
+            {
+                familyMember = await _familyMembersDbContext.FamilyMembers.FindAsync(id);
+            }
             var options = BindToSelectList();
-            var viewModel = new FamilyMemberImageViewModel() { Options = options };
+            var viewModel = new FamilyMemberImageViewModel() 
+            { 
+                Options = options, 
+                SelectedFamMember = familyMember
+            };
             return View(viewModel);
         }
 
