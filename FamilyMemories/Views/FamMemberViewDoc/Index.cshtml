@@ -3,13 +3,13 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>@Model.FirstName's Images</h1>
+<h1>@Model.FirstName's Documents</h1>
 <div class="table-responsive">
   <table class="table align-middle">
     <thead>
       <tr>
-        <th>Picture</th>
-        <th>People in the Picture</th>
+        <th>Document</th>
+        <th>Document Owners</th>
         <th>Short Description</th>
       </tr>
     </thead>
@@ -21,18 +21,11 @@
         
       </tr>
       <tr>
-        <td>
-            <img src="ftp://FileUploadAdmin:TheSchowFamilyHasCrazyC00lPeople@192.168.86.240/Pictures/JonathanAlanJester/FromDanLisa2022.jpg" />
-        </td>
+        <td>...</td>
         <td>...</td>
         <td class="align-top">This cell is aligned to the top.</td>
       </tr>
     </tbody>
   </table>
 </div>
-<form asp-action="index" asp-controller="AddImage">
-    <input value="@Model.Id" type="hidden" name="familyMemberId" />
-    <button type="submit" class="btn btn-primary">Add</button>
-</form>
-
-
+<button type="submit" class="btn btn-primary">Add</button>

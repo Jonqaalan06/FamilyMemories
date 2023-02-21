@@ -6,40 +6,30 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Net;
 using System.Text.RegularExpressions;
-using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace FamilyMemories.Controllers
 {
-    public class AddImageController : Controller
+    public class UploadDocumentController : Controller
     {
         private readonly FamilyMembersDbContext _familyMembersDbContext;
         private readonly IUploadService _uploadService;
-        
-        public AddImageController(FamilyMembersDbContext familyMembersDbContext, IUploadService uploadService, IHostingEnvironment environment)
+
+        public UploadDocumentController(FamilyMembersDbContext familyMembersDbContext, IUploadService uploadService)
         {
             _familyMembersDbContext = familyMembersDbContext;
             _uploadService = uploadService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int? id)
+        public IActionResult Index()
         {
-            FamilyMember familyMember = null;
-            if (id is not null)
-            {
-                familyMember = await _familyMembersDbContext.FamilyMembers.FindAsync(id);
-            }
             var options = BindToSelectList();
-            var viewModel = new FamilyMemberImageViewModel() 
-            { 
-                Options = options, 
-                SelectedFamMember = familyMember
-            };
+            var viewModel = new FamilyMemberDocumentViewModel() { Options = options };
             return View(viewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Upload(FamilyMemberImageViewModel familyImage)
+        public async Task<RedirectToActionResult> Upload(FamilyMemberImageViewModel familyImage)
         {
             //Collect data from view
             FamilyMemberImageViewModel fmivm = new FamilyMemberImageViewModel()
@@ -77,13 +67,15 @@ namespace FamilyMemories.Controllers
                     ImageId = imageId,
                     Image = storedImage
                 };
-                
+
                 _familyMembersDbContext.FamilyMembers_Images.Add(fmImage);
                 _familyMembersDbContext.SaveChanges();
-                
+
             }
 
             return RedirectToAction("Index");
+
+
         }
 
         private static string UploadToFtpSite(IFormFile image, FamilyMember familyMember)
@@ -93,7 +85,7 @@ namespace FamilyMemories.Controllers
 
             // FTP Folder name. Leave blank if you want to upload to root folder
             // (really blank, not "/" !)
-            string ftpFolder = @$"Pictures\{familyMember.DirectoryName}\";
+            string ftpFolder = @$"Documents\{familyMember.DirectoryName}\";
             byte[] fileBytes = null;
             string ftpUserName = "FileUploadAdmin";
             string ftpPassword = "TheSchowFamilyHasCrazyC00lPeople";

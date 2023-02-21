@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.10">
       <PrivateAssets>all</PrivateAssets>
@@ -35,6 +36,7 @@
   <ItemGroup>
     <Folder Include="Images\MemoryPictures\" />
     <Folder Include="Images\Profile Pictures\" />
+    <Folder Include="wwwroot\TestImages\" />
   </ItemGroup>
 
   <ItemGroup>

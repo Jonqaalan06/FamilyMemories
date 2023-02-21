@@ -1,14 +1,16 @@
 using FamilyMemories.Data;
 using FamilyMemories.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<FamilyMembersDbContext>(options => 
+builder.Services.AddDbContext<FamilyMembersDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("FamilyMemoriesConnectionString")));
 builder.Services.AddSingleton<IUploadService, UploadService>();
+//builder.Services.AddSingleton<IFamilyMembersService, FamilyMemberService>();
 
 var app = builder.Build();
 

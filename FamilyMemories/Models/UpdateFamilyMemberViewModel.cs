@@ -11,5 +11,6 @@
         public int? MotherId { get; set; }
         public string? SiblingIds { get; set; }
         public string? ChildrenIds { get; set; }
+        public string Directory { get; set; }
     }
 }

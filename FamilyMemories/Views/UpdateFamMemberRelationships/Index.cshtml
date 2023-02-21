@@ -1,0 +1,87 @@
+﻿@model FamilyMemories.Models.FamilyMemberRelationshipsViewModel
+@{
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+<h1>Build Family Relationships for @Model.Self.FirstName @Model.Self.LastName</h1>
+<hr/>
+<div class="row">
+    <div class="col-mt-3">
+        <form asp-action="Update" enctype="multipart/form-data">
+            
+            <br />
+            
+            <div class="col-mt-3t">
+                <label asp-for="SpouseId">Select @Model.Self.FirstName's Spouse</label>
+                <select class="selectpicker" multiple data-live-search="true"
+                        class="js-multiple-select form-control"
+                        multiple="multiple"
+                        asp-for="SpouseId"
+                        asp-items="@Model.Options"
+                        data-placeholder="Select All People in the Picture">
+                </select>
+            </div>
+            <br />
+            <div class="col-mt-3t">
+                <label asp-for="FatherId">Select @Model.Self.FirstName's Father</label>
+                <select class="selectpicker" multiple data-live-search="true"
+                        class="js-multiple-select form-control"
+                        multiple="multiple"
+                        asp-for="FatherId"
+                        asp-items="@Model.Options"
+                        data-placeholder="Select All People in the Picture">
+                </select>
+            </div>
+            <br />
+            <div class="col-mt-3t">
+                <label asp-for="MotherId">Select @Model.Self.FirstName's Mother</label>
+                <select class="selectpicker" multiple data-live-search="true"
+                        class="js-multiple-select form-control"
+                        multiple="multiple"
+                        asp-for="MotherId"
+                        asp-items="@Model.Options"
+                        data-placeholder="Select All People in the Picture">
+                </select>
+            </div>
+            <br />
+            <div class="col-mt-3t">
+                <label asp-for="SiblingIds">Select @Model.Self.FirstName's Siblings</label>
+                <select class="selectpicker" multiple data-live-search="true"
+                        class="js-multiple-select form-control"
+                        multiple="multiple"
+                        asp-for="SiblingIds"
+                        asp-items="@Model.Options"
+                        data-placeholder="Select All People in the Picture">
+                </select>
+            </div>
+            <br />
+            <div class="col-mt-3t">
+                <label asp-for="ChildrenIds">Select @Model.Self.FirstName's Children</label>
+                <select class="selectpicker" multiple data-live-search="true"
+                        class="js-multiple-select form-control"
+                        multiple="multiple"
+                        asp-for="ChildrenIds"
+                        asp-items="@Model.Options"
+                        data-placeholder="Select All People in the Picture">
+                </select>
+            </div>
+
+            
+            <br />
+            <br />
+            <button type="submit" class="btn btn-primary" id="upload-btn">Save Relationships</button>
+            <input asp-for="SpouseId" type="hidden" />
+            <input asp-for="FatherId" type="hidden" />
+            <input asp-for="MotherId" type="hidden" />
+            <input asp-for="SiblingIds" type="hidden" />
+            <input asp-for="ChildrenIds" type="hidden" />
+            <input asp-for="Self.Id" value="@Model.Self.Id type="hidden" />
+
+        </form>
+    </div>
+</div>
+
+<script src="~/js/site.js"></script>

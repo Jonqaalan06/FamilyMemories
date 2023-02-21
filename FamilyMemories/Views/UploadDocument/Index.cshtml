@@ -1,4 +1,4 @@
-﻿@model FamilyMemories.Models.FamilyMemberImageViewModel
+﻿@model FamilyMemories.Models.FamilyMemberDocumentViewModel
 @{
 }
 
@@ -6,19 +6,19 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 
-<h1>Upload Image</h1>
+<h1>Upload Document</h1>
 <hr/>
 <div class="row">
     <div class="col-mt-3">
         <form asp-action="Upload" enctype="multipart/form-data">
             <div class="form-group">
-                <label asp-for="ImageDescription" class="control-label">Image Description</label>
-                <input asp-for="ImageDescription" class="form-control" />
+                <label asp-for="DocumentDescription" class="control-label">Document Description</label>
+                <input asp-for="DocumentDescription" class="form-control" />
             </div>
             <br />
             <div class="form-group">
                 
-                <input asp-for="Image" class="form-control accept="image/*" />
+                <input asp-for="Document" accept="*" class="form-control" />
             </div>
             <br />
             
@@ -27,14 +27,13 @@
                         class="js-multiple-select form-control"
                         multiple="multiple"
                         asp-for="Options"
-                        asp-items="@Model.Options"
-                        data-placeholder="Select All People in the Picture">
+                        asp-items="@Model.Options">
                 </select>
             </div>
 
-            <label>Family member in the picture, but not in the list?
+            <label>Can't find the document owner in the list?
                 <a href="/FamMembers/Add">
-                     Add them please
+                     Add them please.
                 </a>
             </label>
             <br />

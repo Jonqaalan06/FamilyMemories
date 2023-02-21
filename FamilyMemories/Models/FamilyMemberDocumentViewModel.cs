@@ -4,18 +4,16 @@ using Microsoft.Build.Framework;
 
 namespace FamilyMemories.Models
 {
-    public class FamilyMemberImageViewModel
+    public class FamilyMemberDocumentViewModel
     {
-        
         public List<SelectListItem>? Options { get; set; }
-        public FamilyMember? SelectedFamMember { get; set; }
 
         // TODO: look at implementing validation on these fields.
         [Required]
-        public string ImageDescription { get; set; }
+        public string DocumentDescription { get; set; }
         [Required]
         public string FamMemberIds { get; set; }
         [Required]
-        public IFormFile Image { get; set; }
+        public IFormFile Document { get; set; }
     }
 }
