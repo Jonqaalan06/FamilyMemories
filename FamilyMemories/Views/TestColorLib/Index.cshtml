@@ -1,0 +1,65 @@
+﻿@model FamilyMemories.Models.TestColorLibViewModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutTestColorLib.cshtml";
+}
+
+<h1>Test ColorLib Controls Here</h1>
+  <form asp-action="Index" asp-controller="TestColorLib" method="post">
+    <div class="content">
+        <h2 class="text-center">Multi-Select #3</h2>
+        <div class="container text-left">
+          <div class="row justify-content-center">
+            <div class="col-7 text-center">
+              <p class="text-black">Names seperate with comma ","</p>
+              @*<select 
+                class="js-multiple-select form-control" 
+                multiple="multiple" 
+                asp-items="@Model.DisplayedOptions"
+                data-placeholder="Select all that apply" onselect= >
+                <option asp-for="@Model.SelectedOptions"/>   @*<<<Can I bind to the selected items in a way similar to this?*@
+                
+                
+              @*</select>*@
+                    <select 
+                        id="mySelect" 
+                        multiple 
+                        name="SelectedOptions"
+                        class="js-multiple-select form-control">
+                        @foreach (var option in Model.DisplayedOptions)
+                        {
+                            <option value="@option.Value">@option.Text</option>
+                        }
+                    </select>
+
+                    <input type="hidden" name="SelectedOptions" id="selectedOptions" />
+                    <input type="submit" value="Submit">add family members<input />
+                    
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <script>
+        $(document).ready(function () {
+            // Initialize the multi-select dropdown
+            $("#mySelect").multiselect({
+                includeSelectAllOption: true,
+                selectAllJustVisible: false
+            });
+
+            // Get the selected options and add them to a hidden input element
+            $("#mySelect").change(function () {
+                var selectedOptions = $(this).val();
+                $("#selectedOptions").val(selectedOptions);
+            });
+        });
+    </script>
+
+    
+    
+
+    
+
